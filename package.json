@@ -13,7 +13,7 @@
     "stylelint-config-standard": "^36.0.1"
   },
   "scripts": {
-    "start": "bun add @ls-lint/lint",
+    "start": "bun add @ls-lint/ls-lint",
     "lint": "bun tools/lint/linting.ts"
   },
   "bun-create": {
