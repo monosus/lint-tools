@@ -17,7 +17,7 @@
   },
   "bun-create": {
     "preinstall": "echo 'Installing...'",
-    "postinstall": ["echo 'Done!'"],
+    "postinstall": ["echo 'Done!'"]
   },
   "peerDependencies": {
     "typescript": "^5.5.3"
