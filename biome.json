@@ -38,7 +38,6 @@
   },
   "linter": {
     "enabled": true,
-    "include": ["src/**/*.{js,jsx,ts,tsx}"],
     "ignore": ["**/*.css"],
     "rules": {
       "recommended": true,

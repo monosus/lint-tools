@@ -5,8 +5,8 @@ function runCommand(command: string, commandName: string): Promise<void> {
 	return new Promise((resolve, reject) => {
 		exec(command, (error, stdout, stderr) => {
 			if (error) {
-				console.error(`エラー (${commandName}): ${error.message}`);
-				reject(error);
+				console.error(`エラー (${commandName}): ${stdout} ${error}`);
+				reject({error,stdout});
 				return;
 			}
 			if (stderr) {
@@ -45,8 +45,8 @@ async function main() {
 			"markuplint",
 		),
 		runCommand(
-			"bunx cspell --config lint-tools/.cspell.json src/**/*.{tsx,html,css,md,ts,js,jsx}",
-			"markuplint",
+			"bunx cspell --quiet -c ./lint-tools/cspell.jsonc src/**/*",
+			"cspell",
 		),
 		// runCommand(
 		// 	"bunx markdownlint-cli2 --config \"./.markdownlint-cli2.jsonc\" \"./**/*.{md,mdx}\" --fix",
@@ -55,7 +55,7 @@ async function main() {
 	]);
 
 	const errors = results.filter((result) => result.status === "rejected");
-
+	
 	if (errors.length > 0) {
 		console.error("エラーが発生しました:");
 		for (const [index, error] of errors.entries()) {
