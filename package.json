@@ -19,7 +19,7 @@
   "bun-create": {
     "preinstall": "echo 'Installing...'",
     "postinstall": ["echo 'Done!'"],
-    "start": "bun add @ls-lint/ls-lint"
+    "start": "bun add react react-dom"
   },
   "peerDependencies": {
     "typescript": "^5.5.3"
