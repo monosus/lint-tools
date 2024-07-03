@@ -16,6 +16,11 @@
     "start": "bun add @ls-lint/lint",
     "lint": "bun tools/lint/linting.ts"
   },
+  "bun-create": {
+    "preinstall": "echo 'Installing...'", // a single command
+    "postinstall": ["echo 'Done!'"], // an array of commands
+    "start": "bun add @ls-lint/lint"
+  },
   "peerDependencies": {
     "typescript": "^5.5.3"
   },
