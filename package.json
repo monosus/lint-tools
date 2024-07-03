@@ -17,8 +17,8 @@
     "lint": "bun tools/lint/linting.ts"
   },
   "bun-create": {
-    "preinstall": "echo 'Installing...'", // a single command
-    "postinstall": ["echo 'Done!'"], // an array of commands
+    "preinstall": "echo 'Installing...'",
+    "postinstall": ["echo 'Done!'"],
     "start": "bun add @ls-lint/lint"
   },
   "peerDependencies": {
