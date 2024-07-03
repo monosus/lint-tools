@@ -9,7 +9,7 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 const devDependencies = Object.keys(packageJson.devDependencies);
 
 // コマンドを作成
-const command = `bun add --dev --cwd ../ ${devDependencies.join(' ')}`;
+const command = `bun add --dev  ${devDependencies.join(' ')}`;
 
 // ユーザーに確認を求める
 const rl = readline.createInterface({

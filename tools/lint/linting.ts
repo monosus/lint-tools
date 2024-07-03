@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { exec } from "node:child_process";
 
 function runCommand(command: string, commandName: string): Promise<void> {
 	console.log(`実行中のコマンド: ${commandName}`);
@@ -24,24 +24,24 @@ function runCommand(command: string, commandName: string): Promise<void> {
 async function main() {
 	const results = await Promise.allSettled([
 		runCommand(
-			"bunx ls-lint -config ./tools/lint/.ls-lint.yml",
+			"bunx ls-lint -config ./lint-tools/tools/lint/.ls-lint.yml",
 			"ls-lint",
 		),
 		runCommand(
-			"bunx biome check --config-path ./tools/lint/ --write .",
+			"bunx biome check --config-path ./lint-tools/tools/lint/ --write .",
 			"biome",
 		),
 		runCommand(
-			"bunx stylelint '../**/*.css' '**/*.css' --config tools/lint/.stylelintrc.json --fix --allow-empty-input",
+			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/tools/lint/.stylelintrc.json --fix --allow-empty-input",
 			"stylelint-fix",
 		),
 		runCommand(
-			"bunx stylelint '../**/*.css' '**/*.css' --config tools/lint/.stylelintrc.json --allow-empty-input",
+			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/tools/lint/.stylelintrc.json --allow-empty-input",
 			"stylelint",
 		),
 		runCommand("bunx tsc --noEmit -p tsconfig.json", "tsc"),
 		runCommand(
-			"bunx markuplint --config tools/lint/.markuplintrc.yml src/**/*.{tsx,html}",
+			"bunx markuplint --config lint-tools/tools/lint/.markuplintrc.yml src/**/*.{tsx,html}",
 			"markuplint",
 		),
 		// runCommand(
