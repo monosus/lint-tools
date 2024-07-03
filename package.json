@@ -18,7 +18,7 @@
   },
   "bun-create": {
     "preinstall": "echo 'Installing...'",
-    "postinstall": ["echo 'Done!'","bun add ls-lint"],
+    "postinstall": ["echo 'Done!'"],
     "start": "bun add react react-dom"
   },
   "peerDependencies": {
