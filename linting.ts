@@ -44,6 +44,10 @@ async function main() {
 			"bunx markuplint --config lint-tools/.markuplintrc.yml src/**/*.{tsx,html}",
 			"markuplint",
 		),
+		runCommand(
+			"bunx cspell --config lint-tools/.cspell.json src/**/*.{tsx,html,css,md,ts,js,jsx}",
+			"markuplint",
+		),
 		// runCommand(
 		// 	"bunx markdownlint-cli2 --config \"./.markdownlint-cli2.jsonc\" \"./**/*.{md,mdx}\" --fix",
 		// 	"markdownlint",

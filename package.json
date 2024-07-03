@@ -5,8 +5,9 @@
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
-    "@types/bun": "latest",
     "@ls-lint/ls-lint": "^2.2.3",
+    "@types/bun": "latest",
+    "cspell": "^8.10.0",
     "markuplint": "^4.9.2",
     "stylelint": "^16.6.1",
     "stylelint-config-idiomatic-order": "^10.0.0",
@@ -17,7 +18,7 @@
   },
   "bun-create": {
     "preinstall": "echo 'Installing...'",
-    "postinstall": ["echo 'Installed!'", "node index.js","rm -rf bun.lockb node_modules tsconfig.json package.json .gitignore index.js README.md"],
+    "postinstall": ["echo 'Installed!'", "node index.js", "rm -rf bun.lockb node_modules tsconfig.json package.json .gitignore index.js README.md"],
     "start": "please add 'lint: bun lint-tools/linting.ts' in your root package.json scripts!"
   },
   "peerDependencies": {
