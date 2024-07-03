@@ -72,7 +72,7 @@ async function handleLeftHook() {
   const answer = await askQuestion('left-hookを導入しますか？ (yes/no): ');
   if (answer.toLowerCase() === 'yes') {
     try {
-      await execCommand('bun add --dev left-hook');
+      await execCommand('bun add lefthook --save-dev');
       const leftHookConfigPath = './left-hook.yml';
       if (existsSync(leftHookConfigPath)) {
         renameSync(leftHookConfigPath, '../left-hook.yml');
