@@ -1,6 +1,10 @@
 import { exec } from "child_process";
+import { promisify } from "util";
+import { glob } from "glob";
 
-function runCommand(command: string, commandName: string): Promise<void> {
+const globAsync = promisify(glob);
+
+async function runCommand(command: string, commandName: string): Promise<void> {
 	console.log(`実行中のコマンド: ${commandName}`);
 	return new Promise((resolve, reject) => {
 		exec(command, (error, stdout, stderr) => {
@@ -22,7 +26,9 @@ function runCommand(command: string, commandName: string): Promise<void> {
 }
 
 async function main() {
-	const results = await Promise.allSettled([
+	const cssFiles = await globAsync("../**/*.css");
+
+	const commands = [
 		runCommand(
 			"bunx ls-lint -config ./tools/lint/.ls-lint.yml",
 			"ls-lint",
@@ -31,14 +37,22 @@ async function main() {
 			"bunx biome check --config-path ./tools/lint/ --write .",
 			"biome",
 		),
-		runCommand(
-			"bunx stylelint '**/*.css' --config tools/lint/.stylelintrc.json --fix",
-			"stylelint-fix",
-		),
-		runCommand(
-			"bunx stylelint '**/*.css' --config tools/lint/.stylelintrc.json",
-			"stylelint",
-		),
+	];
+
+	if (cssFiles.length > 0) {
+		commands.push(
+			runCommand(
+				"bunx stylelint '../**/*.css' '**/*.css' --config tools/lint/.stylelintrc.json --fix",
+				"stylelint-fix",
+			),
+			runCommand(
+				"bunx stylelint '../**/*.css' '**/*.css' --config tools/lint/.stylelintrc.json",
+				"stylelint",
+			)
+		);
+	}
+
+	commands.push(
 		runCommand("bunx tsc --noEmit -p tsconfig.json", "tsc"),
 		runCommand(
 			"bunx markuplint --config tools/lint/.markuplintrc.yml src/**/*.{tsx,html}",
@@ -48,7 +62,9 @@ async function main() {
 		// 	"bunx markdownlint-cli2 --config \"./tools/lint/.markdownlint-cli2.jsonc\" \"./**/*.{md,mdx}\" --fix",
 		// 	"markdownlint",
 		// ),
-	]);
+	);
+
+	const results = await Promise.allSettled(commands);
 
 	const errors = results.filter((result) => result.status === "rejected");
 
