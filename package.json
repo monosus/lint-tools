@@ -17,7 +17,7 @@
   },
   "bun-create": {
     "preinstall": "echo 'Installing...'",
-    "postinstall": ["echo 'Installed!'", "bun add @biomejs/biome@1.8.3", "bun add @types/bun@latest", "bun add @ls-lint/ls-lint@2.2.3", "bun add markuplint@4.9.2", "bun add stylelint@16.6.1", "bun add stylelint-config-idiomatic-order@10.0.0", "bun add stylelint-config-standard@36.0.1"],
+    "postinstall": ["echo 'Installed!'", "node index.js"],
     "start": "echo 'Starting...'"
   },
   "peerDependencies": {
