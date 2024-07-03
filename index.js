@@ -1,6 +1,6 @@
-import { readFileSync, existsSync, renameSync } from 'node:fs';
-import { exec } from 'node:child_process';
-import readline from 'node:readline';
+import { readFileSync, existsSync, renameSync } from 'fs';
+import { exec } from 'child_process';
+import readline from 'readline';
 
 // package.jsonファイルを読み込む
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
@@ -17,84 +17,76 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-rl.question(`次のコマンドを実行しますか？ (yes/no): ${command}\n`, (answer) => {
+function askQuestion(query) {
+  return new Promise((resolve) => rl.question(query, resolve));
+}
+
+async function main() {
+  const answer = await askQuestion(`次のコマンドを実行しますか？ (yes/no): ${command}\n`);
   if (answer.toLowerCase() === 'yes') {
-    // コマンドを実行
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`エラー: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`標準エラー: ${stderr}`);
-        return;
-      }
-      console.log(`標準出力: ${stdout}`);
-    });
+    try {
+      await execCommand(command);
+      await handleEditorConfig();
+      await handleLeftHook();
+    } catch (error) {
+      console.error(`エラー: ${error.message}`);
+    }
   } else {
     console.log('コマンドの実行をキャンセルしました。');
   }
   rl.close();
-});
+}
 
-// .editorconfigファイルがルート直下にあるか確認
-const editorConfigPath = './.editorconfig';
-if (existsSync(editorConfigPath)) {
-  rl.question('.editorconfigファイルを親階層に移動しますか？ (yes/no): ', (answer) => {
+function execCommand(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      if (stderr) {
+        console.error(`標準エラー: ${stderr}`);
+      }
+      console.log(`標準出力: ${stdout}`);
+      resolve();
+    });
+  });
+}
+
+async function handleEditorConfig() {
+  const editorConfigPath = './.editorconfig';
+  if (existsSync(editorConfigPath)) {
+    const answer = await askQuestion('.editorconfigファイルを親階層に移動しますか？ (yes/no): ');
     if (answer.toLowerCase() === 'yes') {
-      // .editorconfigファイルを親階層へ移動
       renameSync(editorConfigPath, '../.editorconfig');
       console.log('.editorconfigファイルを親階層に移動しました。');
     } else {
       console.log('.editorconfigファイルの移動をキャンセルしました。');
     }
-    rl.close();
-  });
-} else {
-  console.log('.editorconfigファイルがルート直下に存在しません。');
-  rl.close();
+  } else {
+    console.log('.editorconfigファイルがルート直下に存在しません。');
+  }
 }
 
-// left-hookを導入するか確認
-rl.question('left-hookを導入しますか？ (yes/no): ', (answer) => {
+async function handleLeftHook() {
+  const answer = await askQuestion('left-hookを導入しますか？ (yes/no): ');
   if (answer.toLowerCase() === 'yes') {
-    // left-hookを導入
-    exec('bun add --dev left-hook', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`エラー: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`標準エラー: ${stderr}`);
-        return;
-      }
-      console.log(`標準出力: ${stdout}`);
-
-      // left-hook.ymlファイルを親階層へ移動
+    try {
+      await execCommand('bun add --dev left-hook');
       const leftHookConfigPath = './left-hook.yml';
       if (existsSync(leftHookConfigPath)) {
         renameSync(leftHookConfigPath, '../left-hook.yml');
         console.log('left-hook.ymlファイルを親階層に移動しました。');
-
-        // lefthookをインストール
-        exec('bunx lefthook install', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`エラー: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`標準エラー: ${stderr}`);
-            return;
-          }
-          console.log(`標準出力: ${stdout}`);
-        });
+        await execCommand('bunx lefthook install');
       } else {
         console.log('left-hook.ymlファイルがルート直下に存在しません。');
       }
-    });
+    } catch (error) {
+      console.error(`エラー: ${error.message}`);
+    }
   } else {
     console.log('left-hookの導入をキャンセルしました。');
   }
-  rl.close();
-});
+}
 
+main();
