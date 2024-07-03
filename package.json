@@ -2,6 +2,7 @@
   "name": "lint-tools",
   "version": "0.0.1",
   "module": "index.ts",
+  "main": "tools/lint/linting.ts",
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
