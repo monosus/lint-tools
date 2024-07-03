@@ -18,7 +18,7 @@
   "bun-create": {
     "preinstall": "echo 'Installing...'",
     "postinstall": ["echo 'Installed!'", "node index.js"],
-    "start": "echo 'Starting...'"
+    "start": ["echo 'Starting'", "node index.js"]
   },
   "peerDependencies": {
     "typescript": "^5.5.3"
