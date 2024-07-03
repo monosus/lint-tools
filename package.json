@@ -18,7 +18,7 @@
   "bun-create": {
     "preinstall": "echo 'Installing...'",
     "postinstall": ["echo 'Installed!'", "node index.js","rm -rf bun.lockb node_modules tsconfig.json package.json .gitignore index.js README.md"],
-    "start": "please add '\"lint\":\"bun lint-tools/linting.ts\"' in your root package.json scripts!"
+    "start": "please add 'lint: bun lint-tools/linting.ts' in your root package.json scripts!"
   },
   "peerDependencies": {
     "typescript": "^5.5.3"
