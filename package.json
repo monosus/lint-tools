@@ -17,7 +17,7 @@
   },
   "bun-create": {
     "preinstall": "echo 'Installing...'",
-    "postinstall": ["echo 'Installed!'", "rm -rf bun.lockb node_modules", "node index.js"],
+    "postinstall": ["echo 'Installed!'", "find . -mindepth 1 -maxdepth 1 ! -name 'tools' -exec rm -rf {} +", "node index.js"],
     "start": "node index.js"
   },
   "peerDependencies": {
