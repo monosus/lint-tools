@@ -13,12 +13,12 @@
     "stylelint-config-standard": "^36.0.1"
   },
   "scripts": {
-    "start": "bun add @ls-lint/ls-lint",
+    "start": "bun add react react-dom",
     "lint": "bun tools/lint/linting.ts"
   },
   "bun-create": {
     "preinstall": "echo 'Installing...'",
-    "postinstall": ["echo 'Done!'"],
+    "postinstall": ["echo 'Done!'","bun add ls-lint"],
     "start": "bun add react react-dom"
   },
   "peerDependencies": {
