@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs';
-import { exec } from 'child_process';
-import readline from 'readline';
+import { readFileSync, existsSync, renameSync } from 'node:fs';
+import { exec } from 'node:child_process';
+import readline from 'node:readline';
 
 // package.jsonファイルを読み込む
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
