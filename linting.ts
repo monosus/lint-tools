@@ -24,28 +24,28 @@ function runCommand(command: string, commandName: string): Promise<void> {
 async function main() {
 	const results = await Promise.allSettled([
 		runCommand(
-			"bunx ls-lint -config ./lint-tools/tools/lint/.ls-lint.yml",
+			"bunx ls-lint -config ./lint-tools/.ls-lint.yml",
 			"ls-lint",
 		),
 		runCommand(
-			"bunx biome check --config-path ./lint-tools/tools/lint/ --write .",
+			"bunx biome check --config-path ./lint-tools/ --write .",
 			"biome",
 		),
 		runCommand(
-			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/tools/lint/.stylelintrc.json --fix --allow-empty-input",
+			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/.stylelintrc.json --fix --allow-empty-input",
 			"stylelint-fix",
 		),
 		runCommand(
-			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/tools/lint/.stylelintrc.json --allow-empty-input",
+			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/.stylelintrc.json --allow-empty-input",
 			"stylelint",
 		),
 		runCommand("bunx tsc --noEmit -p tsconfig.json", "tsc"),
 		runCommand(
-			"bunx markuplint --config lint-tools/tools/lint/.markuplintrc.yml src/**/*.{tsx,html}",
+			"bunx markuplint --config lint-tools/.markuplintrc.yml src/**/*.{tsx,html}",
 			"markuplint",
 		),
 		// runCommand(
-		// 	"bunx markdownlint-cli2 --config \"./tools/lint/.markdownlint-cli2.jsonc\" \"./**/*.{md,mdx}\" --fix",
+		// 	"bunx markdownlint-cli2 --config \"./.markdownlint-cli2.jsonc\" \"./**/*.{md,mdx}\" --fix",
 		// 	"markdownlint",
 		// ),
 	]);
