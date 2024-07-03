@@ -1,0 +1,23 @@
+{
+  "name": "lint-tools",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@types/bun": "latest",
+    "ls-lint": "^0.1.2",
+    "markuplint": "^4.9.2",
+    "stylelint": "^16.6.1",
+    "stylelint-config-idiomatic-order": "^10.0.0",
+    "stylelint-config-standard": "^36.0.1"
+  },
+  "scripts": {
+    "lint": "bun tools/lint/linting.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "author": "monoharada",
+  "license": "MIT"
+}
