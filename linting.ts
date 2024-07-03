@@ -6,12 +6,12 @@ function runCommand(command: string, commandName: string): Promise<void> {
 		exec(command, (error, stdout, stderr) => {
 			if (error) {
 				console.error(`エラー (${commandName}): ${stdout} ${error}`);
-				reject({error,stdout});
+				reject({ error, stdout, stderr });
 				return;
 			}
 			if (stderr) {
 				console.error(`標準エラー (${commandName}): ${stderr}`);
-				reject(new Error(stderr));
+				reject({ error: new Error(stderr), stdout, stderr });
 				resolve();
 				return;
 			}
@@ -55,12 +55,15 @@ async function main() {
 	]);
 
 	const errors = results.filter((result) => result.status === "rejected");
-	
+
 	if (errors.length > 0) {
 		console.error("エラーが発生しました:");
 		for (const [index, error] of errors.entries()) {
-			if ("reason" in error && error.reason instanceof Error) {
-				console.error(`エラー ${index + 1}: ${error.reason.message}`);
+			if ("reason" in error) {
+				// console.log({...error.reason})
+				const commandName = error.reason.error.cmd.split(' ')[1] || "不明なコマンド"; // コマンド名を取得
+				const fileName = error.reason.stderr.split('\n')[0] || error.reason.stdout.split('\n')[0] || error.reason.stderr.replace(/\n/g, '') || "不明なファイル"; // ファイル名を取得
+				console.error(`エラー ${index + 1}: 種別: ${commandName}, ファイル名: ${fileName}`);
 			}
 		}
 		process.exit(1); // エラーがある場合、非ゼロの終了コードを返します
