@@ -28,6 +28,7 @@ async function main() {
       await execCommand(command);
       await handleEditorConfig();
       await handleLeftHook();
+      await addLintScript();
     } catch (error) {
       console.error(`エラー: ${error.message}`);
     } finally {
@@ -88,6 +89,19 @@ async function handleLeftHook() {
     }
   } else {
     console.log('lefthookの導入をキャンセルしました。');
+  }
+}
+
+async function addLintScript() {
+  const parentPackageJsonPath = '../package.json';
+  if (existsSync(parentPackageJsonPath)) {
+    const parentPackageJson = JSON.parse(readFileSync(parentPackageJsonPath, 'utf8'));
+    parentPackageJson.scripts = parentPackageJson.scripts || {};
+    parentPackageJson.scripts.lint = "bun ./lint-tools/linting.ts";
+    writeFileSync(parentPackageJsonPath, JSON.stringify(parentPackageJson, null, 2), 'utf8');
+    console.log('親階層のpackage.jsonにlintスクリプトを追加しました。');
+  } else {
+    console.log('親階層にpackage.jsonが存在しません。');
   }
 }
 
