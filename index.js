@@ -79,7 +79,7 @@ async function handleEditorConfig() {
 }
 
 async function handleLeftHook() {
-  const answer = await askQuestion("left-hookを導入しますか？ (yes/no): ");
+  const answer = await askQuestion("left-hookを導入しますか？git initしていない場合はgit initします。 (yes/no): ");
   if (answer.toLowerCase() === "yes" || answer.trim() === "") {
     try {
       const leftHookConfigPath = "./lefthook.yml";
@@ -87,6 +87,13 @@ async function handleLeftHook() {
         await renameSync(leftHookConfigPath, "../lefthook.yml");
         console.log("lefthook.ymlファイルを親階層に移動しました。");
         await execCommand("bun add --dev --cwd ../ lefthook");
+
+        // git initが必要かどうかを確認し、必要なら実行
+        if (!existsSync("../.git")) {
+          await execCommand("cd .. && git init");
+          console.log("gitリポジトリを初期化しました。");
+        }
+
         await execCommand("cd .. && bunx lefthook install");
       } else {
         console.log("lefthook.ymlファイルがルート直下に存在しません。");
