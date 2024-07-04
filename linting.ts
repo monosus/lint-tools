@@ -32,11 +32,11 @@ async function main() {
 			"biome",
 		),
 		runCommand(
-			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/.stylelintrc.json --fix --allow-empty-input",
+			"bunx stylelint  '**/*.css' --config lint-tools/.stylelintrc.json --fix --allow-empty-input",
 			"stylelint-fix",
 		),
 		runCommand(
-			"bunx stylelint '../**/*.css' '**/*.css' --config lint-tools/.stylelintrc.json --allow-empty-input",
+			"bunx stylelint  '**/*.css' --config lint-tools/.stylelintrc.json --allow-empty-input",
 			"stylelint",
 		),
 		runCommand("bunx tsc --noEmit -p tsconfig.json", "tsc"),

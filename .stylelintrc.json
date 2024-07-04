@@ -9,5 +9,5 @@
 		],
 		"import-notation": "string"
 	},
-	"ignoreFiles": ["../../node_modules/**/*", "../../dist/**/*"]
+	"ignoreFiles": ["../node_modules/**/*", "../dist/**/*"]
 }
