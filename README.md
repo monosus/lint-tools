@@ -9,6 +9,7 @@ Quickly introduce quality and consistency
 - ls-lint
 - lefthook
 - editorconfig
+
 Use the bun create command to immediately introduce the lint tool into the project.
 
 add your project
