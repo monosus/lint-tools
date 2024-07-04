@@ -6,6 +6,8 @@
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@ls-lint/ls-lint": "^2.2.3",
+    "@markuplint/jsx-parser": "^4.7.5",
+    "@markuplint/react-spec": "^4.5.5",
     "@types/bun": "latest",
     "cspell": "^8.10.0",
     "markuplint": "^4.9.2",
@@ -25,8 +27,5 @@
     "typescript": "^5.5.3"
   },
   "author": "monoharada",
-  "license": "MIT",
-  "dependencies": {
-    "@markuplint/jsx-parser": "^4.7.5"
-  }
+  "license": "MIT"
 }
