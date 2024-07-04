@@ -23,7 +23,7 @@ function askQuestion(query) {
 
 async function main() {
   const answer = await askQuestion(
-    `次のコマンドを実行しますか？ (yes/no): ${command}\n`
+    '依存関係をインストールしましょう！ (yes/no)\n'
   );
   if (answer.toLowerCase() === "yes" || answer.trim() === "") {
     try {
@@ -33,6 +33,9 @@ async function main() {
       await addLintScript();
     } catch (error) {
       console.error(`エラー: ${error.message}`);
+      await handleEditorConfig();
+      await handleLeftHook();
+      await addLintScript();
     } finally {
       rl.close();
     }
