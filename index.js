@@ -23,10 +23,10 @@ function askQuestion(query) {
 
 async function main() {
   try {
-    await execCommand(command);
+    await addLintScript();
+    await installDependencies();
     await handleEditorConfig();
     await handleLeftHook();
-    await addLintScript();
   } catch (error) {
     console.error(`エラー: ${error.message}`);
   } finally {
@@ -34,31 +34,34 @@ async function main() {
   }
 }
 
-/**
- * The function `execCommand` is rewritten to remove the `async` keyword from the Promise executor function.
- * The `handleEditorConfig` function remains unchanged.
- */
-
-// Start of Selection
-
-async function execCommand(command) {
-  const answer = await askQuestion('依存関係をインストールしますか？ (yes/no)\n');
-  if (answer.toLowerCase() === "yes" || answer.trim() === "") {
-    return new Promise((resolve, reject) => {
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        if (stderr) {
-          console.error(`標準エラー: ${stderr}`);
-        }
-        console.log(`標準出力: ${stdout}`);
-        resolve();
-      });
+function execCommand(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      if (stderr) {
+        console.error(`標準エラー: ${stderr}`);
+      }
+      console.log(`標準出力: ${stdout}`);
+      resolve();
     });
+  });
+}
+
+async function installDependencies() {
+  const answer = await askQuestion(
+    '依存関係をインストールしましょう！ (yes/no)\n'
+  );
+  if (answer.toLowerCase() === "yes" || answer.trim() === "") {
+    try {
+      await execCommand(command);
+    } catch (error) {
+      console.error(`エラー: ${error.message}`);
+    }
   } else {
-    console.log("依存関係のインストールをスキップしました。");
+    console.log("依存関係のインストールをキャンセルしました。");
   }
 }
 
@@ -102,21 +105,24 @@ async function handleLeftHook() {
 
 async function addLintScript() {
   const parentPackageJsonPath = "../package.json";
-  if (existsSync(parentPackageJsonPath)) {
-    const parentPackageJson = JSON.parse(
-      readFileSync(parentPackageJsonPath, "utf8")
-    );
-    parentPackageJson.scripts = parentPackageJson.scripts || {};
-    parentPackageJson.scripts.lint = "bun ./lint-tools/linting.ts";
-    writeFileSync(
-      parentPackageJsonPath,
-      JSON.stringify(parentPackageJson, null, 2),
-      "utf8"
-    );
-    console.log("親階層のpackage.jsonにlintスクリプトを追加しました。");
-  } else {
-    console.log("親階層にpackage.jsonが存在しません。");
+  const currentPackageJsonPath = "./package.json";
+
+  if (!existsSync(parentPackageJsonPath)) {
+    console.log("親階層にpackage.jsonが存在しません。自分の階層のpackage.jsonを親階層に移動します。");
+    renameSync(currentPackageJsonPath, parentPackageJsonPath);
   }
+
+  const parentPackageJson = JSON.parse(
+    readFileSync(parentPackageJsonPath, "utf8")
+  );
+  parentPackageJson.scripts = parentPackageJson.scripts || {};
+  parentPackageJson.scripts.lint = "bun ./lint-tools/linting.ts";
+  writeFileSync(
+    parentPackageJsonPath,
+    JSON.stringify(parentPackageJson, null, 2),
+    "utf8"
+  );
+  console.log("親階層のpackage.jsonにlintスクリプトを追加しました。");
 }
 
 main();
