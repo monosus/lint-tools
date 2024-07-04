@@ -1,6 +1,6 @@
-import { readFileSync, existsSync, renameSync } from 'fs';
-import { exec } from 'child_process';
-import readline from 'readline';
+import { readFileSync, existsSync, renameSync } from 'node:fs';
+import { exec } from 'node:child_process';
+import readline from 'node:readline';
 
 // package.jsonファイルを読み込む
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
@@ -23,7 +23,7 @@ function askQuestion(query) {
 
 async function main() {
   const answer = await askQuestion(`次のコマンドを実行しますか？ (yes/no): ${command}\n`);
-  if (answer.toLowerCase() === 'yes') {
+  if (answer.toLowerCase() === 'yes' || answer.trim() === '') {
     try {
       await execCommand(command);
       await handleEditorConfig();
@@ -33,8 +33,8 @@ async function main() {
     }
   } else {
     console.log('コマンドの実行をキャンセルしました。');
+    rl.close();
   }
-  rl.close();
 }
 
 function execCommand(command) {
@@ -57,7 +57,7 @@ async function handleEditorConfig() {
   const editorConfigPath = './.editorconfig';
   if (existsSync(editorConfigPath)) {
     const answer = await askQuestion('.editorconfigファイルを親階層に移動しますか？ (yes/no): ');
-    if (answer.toLowerCase() === 'yes') {
+    if (answer.toLowerCase() === 'yes' || answer.trim() === '') {
       renameSync(editorConfigPath, '../.editorconfig');
       console.log('.editorconfigファイルを親階層に移動しました。');
     } else {
@@ -70,7 +70,7 @@ async function handleEditorConfig() {
 
 async function handleLeftHook() {
   const answer = await askQuestion('left-hookを導入しますか？ (yes/no): ');
-  if (answer.toLowerCase() === 'yes') {
+  if (answer.toLowerCase() === 'yes' || answer.trim() === '') {
     try {
       const leftHookConfigPath = './lefthook.yml';
       if (existsSync(leftHookConfigPath)) {
