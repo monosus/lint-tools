@@ -42,22 +42,24 @@ async function main() {
 // Start of Selection
 
 async function execCommand(command) {
-  const answer = await askQuestion(
-    "依存関係をインストールしますか？ (yes/no)\n"
-  );
+  const answer = await askQuestion('依存関係をインストールしますか？ (yes/no)\n');
   if (answer.toLowerCase() === "yes" || answer.trim() === "") {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      if (stderr) {
-        console.error(`標準エラー: ${stderr}`);
-      }
-      console.log(`標準出力: ${stdout}`);
+    return new Promise((resolve, reject) => {
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        if (stderr) {
+          console.error(`標準エラー: ${stderr}`);
+        }
+        console.log(`標準出力: ${stdout}`);
+        resolve();
+      });
     });
+  } else {
+    console.log("依存関係のインストールをスキップしました。");
   }
-  console.log("依存関係のインストールをスキップしました。");
 }
 
 async function handleEditorConfig() {
