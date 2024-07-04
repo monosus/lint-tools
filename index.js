@@ -73,19 +73,19 @@ async function handleLeftHook() {
   if (answer.toLowerCase() === 'yes') {
     try {
       await execCommand('bun add lefthook --save-dev');
-      const leftHookConfigPath = './left-hook.yml';
+      const leftHookConfigPath = './lefthook.yml';
       if (existsSync(leftHookConfigPath)) {
-        renameSync(leftHookConfigPath, '../left-hook.yml');
-        console.log('left-hook.ymlファイルを親階層に移動しました。');
+        renameSync(leftHookConfigPath, '../lefthook.yml');
+        console.log('lefthook.ymlファイルを親階層に移動しました。');
         await execCommand('bunx lefthook install');
       } else {
-        console.log('left-hook.ymlファイルがルート直下に存在しません。');
+        console.log('lefthook.ymlファイルがルート直下に存在しません。');
       }
     } catch (error) {
       console.error(`エラー: ${error.message}`);
     }
   } else {
-    console.log('left-hookの導入をキャンセルしました。');
+    console.log('lefthookの導入をキャンセルしました。');
   }
 }
 
