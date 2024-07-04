@@ -76,7 +76,7 @@ async function handleLeftHook() {
       if (existsSync(leftHookConfigPath)) {
         await renameSync(leftHookConfigPath, '../lefthook.yml');
         console.log('lefthook.ymlファイルを親階層に移動しました。');
-        await execCommand('bun add --cwd ../ lefthook');
+        await execCommand('bun add --dev --cwd ../ lefthook');
         await execCommand('cd .. && bunx lefthook install');
       } else {
         console.log('lefthook.ymlファイルがルート直下に存在しません。');
