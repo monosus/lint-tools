@@ -30,6 +30,8 @@ async function main() {
       await handleLeftHook();
     } catch (error) {
       console.error(`エラー: ${error.message}`);
+    } finally {
+      rl.close();
     }
   } else {
     console.log('コマンドの実行をキャンセルしました。');
