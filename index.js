@@ -52,14 +52,10 @@ function execCommand(command) {
 
 async function installDependencies() {
   const answer = await askQuestion(
-    '依存関係をインストールしましょう！ (yes/no)\n'
+    "依存関係をインストールしましょう！ (yes/no)\n"
   );
   if (answer.toLowerCase() === "yes" || answer.trim() === "") {
-    try {
-      await execCommand(command);
-    } catch (error) {
-      console.error(`エラー: ${error.message}`);
-    }
+    await execCommand(command);
   } else {
     console.log("依存関係のインストールをキャンセルしました。");
   }
@@ -108,7 +104,9 @@ async function addLintScript() {
   const currentPackageJsonPath = "./package.json";
 
   if (!existsSync(parentPackageJsonPath)) {
-    console.log("親階層にpackage.jsonが存在しません。自分の階層のpackage.jsonを親階層に移動します。");
+    console.log(
+      "親階層にpackage.jsonが存在しません。自分の階層のpackage.jsonを親階層に移動します。"
+    );
     renameSync(currentPackageJsonPath, parentPackageJsonPath);
   }
 
