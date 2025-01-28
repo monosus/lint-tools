@@ -1,8 +1,32 @@
 pre-commit:
   parallel: false
   commands:
-    lint:
+    typeCheck:
+      tags: frontend typescript
+      glob: '*.{ts,tsx}'
+      run: bunx tsc --noEmit -p tsconfig.json
+      stage_fixed: true
+    lsLint:
+      tags: filename rules
+      glob: '*'
+      run: bunx ls-lint -config ./lint-tools/.ls-lint.yml
+    cspell:
+      tags: spelling
+      glob: '*.{js,jsx,ts,tsx,md,yaml,yml,json,css,scss,less,html,htm,astro,sh,md,mdx}'
+      run: bunx cspell --quiet -c ./lint-tools/cspell.jsonc {staged_files}
+      stage_fixed: true
+    biome:
       tags: frontend style
       glob: '*.{js,jsx,ts,tsx,md,yaml,yml,json,css,scss,less,html,htm,astro}'
-      run: bun lint
+      run: bunx biome check --config-path ./lint-tools/ --write {staged_files}
       stage_fixed: true
+    stylelint:
+      tags: css style
+      glob: '*.{css,scss,less}'
+      run: bunx stylelint {staged_files} --config lint-tools/.stylelintrc.json --allow-empty-input
+      stage_fixed: true
+    markuplint:
+      tags: markup test
+      glob: '*.{html,htm,astro,jsx,tsx}'
+      run: bunx markuplint --config lint-tools/.markuplintrc.yml  {staged_files}
+      
