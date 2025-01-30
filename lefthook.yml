@@ -17,7 +17,7 @@ pre-commit:
       stage_fixed: true
     biome:
       tags: frontend style
-      glob: '*.{js,jsx,ts,tsx,md,yaml,yml,json,css,scss,less,html,htm,astro}'
+      glob: '*.{js,jsx,ts,tsx,json,css,scss,astro}'
       run: bunx biome check --config-path ./lint-tools/ --write {staged_files}
       stage_fixed: true
     stylelint:
@@ -29,4 +29,3 @@ pre-commit:
       tags: markup test
       glob: '*.{html,htm,astro,jsx,tsx}'
       run: bunx markuplint --config lint-tools/.markuplintrc.yml  {staged_files}
-      
